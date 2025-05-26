@@ -8,11 +8,6 @@ build/
 
 .vite/
 
-.env
-.env.local
-.env.*.local
-firebaseConfig.ts
-
 firestore.indexes.json
 firestore.rules
 storage.rules

@@ -2,13 +2,13 @@ import { initializeApp } from 'firebase/app';
 import { getFirestore } from 'firebase/firestore';
 
 const firebaseConfig = {
-    apiKey: "AIzaSyDGp9dAzwStYpW2ASZYvRkP9zcRfYNYuz8",
-    authDomain: "tg-personal-assistant.firebaseapp.com",
-    projectId: "tg-personal-assistant",
-    storageBucket: "tg-personal-assistant.firebasestorage.app",
-    messagingSenderId: "352279668043",
-    appId: "1:352279668043:web:c799c763e10b39c60a34ce",
-    measurementId: "G-6RVGGK03P3"
+  apiKey: import.meta.env.VITE_FIREBASE_API_KEY,
+  authDomain: import.meta.env.VITE_FIREBASE_AUTH_DOMAIN,
+  projectId: import.meta.env.VITE_FIREBASE_PROJECT_ID,
+  storageBucket: import.meta.env.VITE_FIREBASE_STORAGE_BUCKET,
+  messagingSenderId: import.meta.env.VITE_FIREBASE_MESSAGING_SENDER_ID,
+  appId: import.meta.env.VITE_FIREBASE_APP_ID,
+  measurementId: import.meta.env.VITE_FIREBASE_MEASUREMENT_ID,
 };
 
 const app = initializeApp(firebaseConfig);
