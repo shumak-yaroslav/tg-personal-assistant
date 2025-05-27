@@ -2,6 +2,7 @@ import React, { useState, useEffect, useCallback } from 'react';
 import type { Task } from '../task-list.types.ts';
 import { addDoc, collection, deleteDoc, doc, getDocs } from 'firebase/firestore';
 import { db } from '../../../firebase/firebaseConfig.ts';
+import { EMPTY_STRING } from '../../../shared/consts';
 
 interface UseTasksReturnValues {
   tasks: Array<Task>;
@@ -17,7 +18,7 @@ interface UseTasksProps {
 
 export const useTasks = ({ userId }: UseTasksProps): UseTasksReturnValues => {
   const [tasks, setTasks] = useState<Array<Task>>([]);
-  const [task, setTask] = useState('');
+  const [task, setTask] = useState(EMPTY_STRING);
 
   const fetchTasks = useCallback(async () => {
     const snapshot = await getDocs(collection(db, `users/${userId}/tasks`));
@@ -37,7 +38,7 @@ export const useTasks = ({ userId }: UseTasksProps): UseTasksReturnValues => {
 
     await addDoc(collection(db, `users/${userId}/tasks`), { text: task });
 
-    setTask('');
+    setTask(EMPTY_STRING);
     fetchTasks();
   }, [task, userId, fetchTasks]);
 

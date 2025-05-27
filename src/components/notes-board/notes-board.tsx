@@ -3,6 +3,7 @@ import { Button, Typography, TextField, List, Paper, Stack } from '@mui/material
 import type { NotesBoardProps } from './notes-board.types';
 import { NotesBoardItem } from './components/notes-board-item.tsx';
 import { useNotes } from './hooks/use-notes.hook.ts';
+import { EXTERNAL_HEADER_HEIGHT } from '../../shared/consts';
 
 export const NotesBoard: React.FC<NotesBoardProps> = React.memo(({ userId }) => {
   const { notes, handleAddNote, handleInputChange, handleRemoveNote, note } = useNotes({ userId });
@@ -24,7 +25,7 @@ export const NotesBoard: React.FC<NotesBoardProps> = React.memo(({ userId }) => 
           Save
         </Button>
       </Stack>
-      <List sx={{ maxHeight: 'calc(100vh - 280px)', overflow: 'auto' }}>
+      <List sx={{ maxHeight: `calc(100vh - ${EXTERNAL_HEADER_HEIGHT}px)`, overflow: 'auto' }}>
         {notes.map((note) => (
           <NotesBoardItem key={note.id} handleRemoveNote={handleRemoveNote} note={note} />
         ))}

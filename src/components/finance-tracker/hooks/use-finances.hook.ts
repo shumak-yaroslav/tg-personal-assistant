@@ -3,6 +3,7 @@ import { addDoc, collection, deleteDoc, doc, getDocs } from 'firebase/firestore'
 import { db } from '../../../firebase/firebaseConfig.ts';
 import type { Entry, EntryType } from '../finance-tracker.types.ts';
 import type { SelectChangeEvent } from '@mui/material';
+import { EMPTY_STRING } from '../../../shared/consts';
 
 interface UseFinancesReturnValues {
   entries: Array<Entry>;
@@ -23,8 +24,8 @@ interface UseFinancesProps {
 
 export const useFinances = ({ userId }: UseFinancesProps): UseFinancesReturnValues => {
   const [entries, setEntries] = useState<Array<Entry>>([]);
-  const [amount, setAmount] = useState<string>('');
-  const [category, setCategory] = useState<string>('');
+  const [amount, setAmount] = useState<string>(EMPTY_STRING);
+  const [category, setCategory] = useState<string>(EMPTY_STRING);
   const [type, setType] = useState<EntryType>('expense');
 
   const handleAmountChange = useCallback((event: React.ChangeEvent<HTMLInputElement>) => {
@@ -61,8 +62,8 @@ export const useFinances = ({ userId }: UseFinancesProps): UseFinancesReturnValu
       type,
     });
 
-    setAmount('');
-    setCategory('');
+    setAmount(EMPTY_STRING);
+    setCategory(EMPTY_STRING);
     fetchEntries();
   }, [amount, category, type, userId, fetchEntries]);
 

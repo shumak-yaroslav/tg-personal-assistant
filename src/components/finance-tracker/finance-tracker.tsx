@@ -14,6 +14,7 @@ import {
 import { FinanceListItem } from './components/finance-list-item.tsx';
 import type { FinanceTrackerProps } from './finance-tracker.types.ts';
 import { useFinances } from './hooks/use-finances.hook.ts';
+import { EXTERNAL_HEADER_HEIGHT } from '../../shared/consts';
 
 export const FinanceTracker: React.FC<FinanceTrackerProps> = memo(({ userId }) => {
   const {
@@ -63,7 +64,7 @@ export const FinanceTracker: React.FC<FinanceTrackerProps> = memo(({ userId }) =
           Add
         </Button>
       </Stack>
-      <List sx={{ maxHeight: 'calc(100vh - 280px)', overflow: 'auto' }}>
+      <List sx={{ maxHeight: `calc(100vh - ${EXTERNAL_HEADER_HEIGHT}px)`, overflow: 'auto' }}>
         {entries.map((entry) => (
           <FinanceListItem
             key={entry.id}

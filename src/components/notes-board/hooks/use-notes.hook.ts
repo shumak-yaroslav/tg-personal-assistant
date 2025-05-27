@@ -2,6 +2,7 @@ import React, { useState, useEffect, useCallback } from 'react';
 import { addDoc, collection, deleteDoc, doc, getDocs } from 'firebase/firestore';
 import { db } from '../../../firebase/firebaseConfig.ts';
 import type { Note } from '../notes-board.types.ts';
+import { EMPTY_STRING } from '../../../shared/consts';
 
 interface UseNotesReturnValues {
   notes: Array<Note>;
@@ -17,7 +18,7 @@ interface UseNotesProps {
 
 export const useNotes = ({ userId }: UseNotesProps): UseNotesReturnValues => {
   const [notes, setNotes] = useState<Array<Note>>([]);
-  const [note, setNote] = useState('');
+  const [note, setNote] = useState(EMPTY_STRING);
 
   const fetchNotes = useCallback(async () => {
     const snapshot = await getDocs(collection(db, `users/${userId}/notes`));
@@ -35,7 +36,7 @@ export const useNotes = ({ userId }: UseNotesProps): UseNotesReturnValues => {
       content: note,
       created: new Date().toISOString(),
     });
-    setNote('');
+    setNote(EMPTY_STRING);
     fetchNotes();
   }, [note, userId, fetchNotes]);
 

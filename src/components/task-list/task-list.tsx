@@ -3,6 +3,7 @@ import { Button, List, TextField, Typography, Paper, Stack } from '@mui/material
 import type { TaskListProps } from './task-list.types.ts';
 import { TaskListItem } from './components/task-list-item.tsx';
 import { useTasks } from './hooks/use-tasks.hook.ts';
+import { EXTERNAL_HEADER_HEIGHT } from '../../shared/consts';
 
 export const TaskList: React.FC<TaskListProps> = React.memo(({ userId }) => {
   const { tasks, handleRemoveTask, handleInputChange, handleAddTask, task } = useTasks({ userId });
@@ -25,7 +26,7 @@ export const TaskList: React.FC<TaskListProps> = React.memo(({ userId }) => {
           Add
         </Button>
       </Stack>
-      <List sx={{ maxHeight: 'calc(100vh - 280px)', overflow: 'auto' }}>
+      <List sx={{ maxHeight: `calc(100vh - ${EXTERNAL_HEADER_HEIGHT}px)`, overflow: 'auto' }}>
         {tasks.map((task) => (
           <TaskListItem key={task.id} handleRemoveTask={handleRemoveTask} task={task} />
         ))}
