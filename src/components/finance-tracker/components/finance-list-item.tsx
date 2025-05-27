@@ -25,7 +25,7 @@ export const FinanceListItem: React.FC<ListItemProps> = memo(
           </IconButton>
         }
       >
-        <ListItemText primary={`${amount} ₽ • ${category}`} secondary={typeLabel} />
+        <ListItemText primary={`${amount} BYN • ${category}`} secondary={typeLabel} />
       </ListItem>
     );
   }
