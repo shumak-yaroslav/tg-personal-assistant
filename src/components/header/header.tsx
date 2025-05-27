@@ -27,7 +27,15 @@ export const Header: React.FC<HeaderProps> = memo(({ active, onChange, user }) =
       }}
     >
       <Toolbar sx={{ minHeight: 56, display: 'flex', justifyContent: 'space-between' }}>
-        <Box sx={{ fontWeight: 500 }}>
+        <Box
+          sx={{
+            fontWeight: 500,
+            overflow: 'hidden',
+            whiteSpace: 'nowrap',
+            textOverflow: 'ellipsis',
+            maxWidth: '50%',
+          }}
+        >
           {title}
         </Box>
         <Box display="flex" gap={1}>
