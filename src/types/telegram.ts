@@ -31,5 +31,5 @@ export interface TelegramWebApp {
     enable: () => void;
     disable: () => void;
   };
-  onEvent: (eventName: string, callback: (...args: any[]) => void) => void;
+  onEvent: (eventName: string, callback: (...args: unknown[]) => void) => void;
 }
