@@ -4,5 +4,5 @@ export interface Task {
 }
 
 export interface TaskListProps {
-  uuid: string;
+  userId?: number;
 }

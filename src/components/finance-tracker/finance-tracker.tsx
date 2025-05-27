@@ -1,6 +1,4 @@
-import React, { memo, useCallback, useEffect, useMemo, useState } from 'react';
-import { collection, addDoc, getDocs, deleteDoc, doc } from 'firebase/firestore';
-import { db } from '../../firebase/firebaseConfig';
+import React, { memo } from 'react';
 import {
   Button,
   List,
@@ -12,73 +10,24 @@ import {
   InputLabel,
   FormControl,
   Stack,
-  type SelectChangeEvent,
 } from '@mui/material';
 import { FinanceListItem } from './components/finance-list-item.tsx';
-import type { Entry, EntryType, FinanceTrackerProps } from './finance-tracker.types.ts';
+import type { FinanceTrackerProps } from './finance-tracker.types.ts';
+import { useFinances } from './hooks/use-finances.hook.ts';
 
-export const FinanceTracker: React.FC<FinanceTrackerProps> = memo(({ uuid }) => {
-  const [entries, setEntries] = useState<Array<Entry>>([]);
-  const [amount, setAmount] = useState('');
-  const [category, setCategory] = useState('');
-  const [type, setType] = useState<EntryType>('expense');
-
-  const handleAmountChange = useCallback((event: React.ChangeEvent<HTMLInputElement>) => {
-    const value = event.target.value;
-
-    if (/^\d*\.?\d*$/.test(value)) {
-      setAmount(value);
-    }
-  }, []);
-
-  const handleCategoryChange = useCallback((event: React.ChangeEvent<HTMLInputElement>) => {
-    setCategory(event.target.value);
-  }, []);
-
-  const handleTypeChange = useCallback((event: SelectChangeEvent) => {
-    setType(event.target.value as EntryType);
-  }, []);
-
-  const fetchEntries = useCallback(async () => {
-    const snapshot = await getDocs(collection(db, `users/${uuid}/finance`));
-    const result = snapshot.docs.map((doc) => ({
-      id: doc.id,
-      ...doc.data(),
-    })) as Entry[];
-    setEntries(result);
-  }, [uuid]);
-
-  const handleAddEntry = useCallback(async () => {
-    if (!amount || !category) return;
-
-    await addDoc(collection(db, `users/${uuid}/finance`), {
-      amount: parseFloat(amount),
-      category,
-      type,
-    });
-
-    setAmount('');
-    setCategory('');
-    fetchEntries();
-  }, [amount, category, type, uuid, fetchEntries]);
-
-  const handleRemoveEntry = useCallback(
-    async (id: string) => {
-      await deleteDoc(doc(db, `users/${uuid}/finance/${id}`));
-      fetchEntries();
-    },
-    [uuid, fetchEntries]
-  );
-
-  const balance = useMemo(() => {
-    return entries.reduce((acc, entry) => {
-      return entry.type === 'income' ? acc + entry.amount : acc - entry.amount;
-    }, 0);
-  }, [entries]);
-
-  useEffect(() => {
-    fetchEntries();
-  }, [fetchEntries]);
+export const FinanceTracker: React.FC<FinanceTrackerProps> = memo(({ userId }) => {
+  const {
+    amount,
+    balance,
+    category,
+    entries,
+    handleAddEntry,
+    handleAmountChange,
+    handleCategoryChange,
+    handleRemoveEntry,
+    handleTypeChange,
+    type,
+  } = useFinances({ userId });
 
   return (
     <Paper sx={{ p: { xs: 2, sm: 3 }, borderRadius: 2 }}>
@@ -86,7 +35,7 @@ export const FinanceTracker: React.FC<FinanceTrackerProps> = memo(({ uuid }) => 
         Finance
       </Typography>
       <Typography variant="body1" mb={2}>
-        Balance: {balance.toFixed(2)} ₽
+        Balance: {balance.toFixed(2)} BYN
       </Typography>
       <Stack direction={{ xs: 'column', sm: 'row' }} spacing={2} mb={2}>
         <TextField
@@ -114,7 +63,7 @@ export const FinanceTracker: React.FC<FinanceTrackerProps> = memo(({ uuid }) => 
           Add
         </Button>
       </Stack>
-      <List>
+      <List sx={{ maxHeight: 'calc(100vh - 280px)', overflow: 'auto' }}>
         {entries.map((entry) => (
           <FinanceListItem
             key={entry.id}

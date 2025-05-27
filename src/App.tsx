@@ -4,6 +4,7 @@ import { Header } from './components/header';
 import { TaskList } from './components/task-list';
 import { NotesBoard } from './components/notes-board';
 import { FinanceTracker } from './components/finance-tracker';
+import { useTelegramData } from './hooks/use-telegram-data.hook.ts';
 
 const theme = createTheme({
   palette: {
@@ -43,17 +44,17 @@ const theme = createTheme({
 
 export const App: React.FC = () => {
   const [section, setSection] = useState<'tasks' | 'finance' | 'notes'>('tasks');
-  const uuid = 'demo-user';
+  const { user } = useTelegramData();
 
   return (
     <ThemeProvider theme={theme}>
       <CssBaseline />
       <Container maxWidth="md" disableGutters>
-        <Header active={section} onChange={setSection} />
+        <Header user={user} active={section} onChange={setSection} />
         <Box mt={4} sx={{ paddingLeft: 2, paddingRight: 2 }}>
-          {section === 'tasks' && <TaskList uuid={uuid} />}
-          {section === 'finance' && <FinanceTracker uuid={uuid} />}
-          {section === 'notes' && <NotesBoard uuid={uuid} />}
+          {section === 'tasks' && <TaskList userId={user?.id} />}
+          {section === 'finance' && <FinanceTracker userId={user?.id} />}
+          {section === 'notes' && <NotesBoard userId={user?.id} />}
         </Box>
       </Container>
     </ThemeProvider>

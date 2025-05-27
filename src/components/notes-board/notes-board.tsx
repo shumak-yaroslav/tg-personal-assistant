@@ -1,49 +1,11 @@
-import React, { useEffect, useState, useCallback } from 'react';
-import { collection, addDoc, getDocs, deleteDoc, doc } from 'firebase/firestore';
-import { db } from '../../firebase/firebaseConfig';
+import React from 'react';
 import { Button, Typography, TextField, List, Paper, Stack } from '@mui/material';
-import type { Note, NotesBoardProps } from './notes-board.types';
+import type { NotesBoardProps } from './notes-board.types';
 import { NotesBoardItem } from './components/notes-board-item.tsx';
+import { useNotes } from './hooks/use-notes.hook.ts';
 
-export const NotesBoard: React.FC<NotesBoardProps> = React.memo(({ uuid }) => {
-  const [notes, setNotes] = useState<Note[]>([]);
-  const [note, setNote] = useState('');
-
-  const fetchNotes = useCallback(async () => {
-    const snapshot = await getDocs(collection(db, `users/${uuid}/notes`));
-    const result = snapshot.docs.map((doc) => ({
-      id: doc.id,
-      content: doc.data().content,
-      created: doc.data().created,
-    })) as Note[];
-    setNotes(result);
-  }, [uuid]);
-
-  const handleAddNote = useCallback(async () => {
-    if (!note.trim()) return;
-    await addDoc(collection(db, `users/${uuid}/notes`), {
-      content: note,
-      created: new Date().toISOString(),
-    });
-    setNote('');
-    fetchNotes();
-  }, [note, uuid, fetchNotes]);
-
-  const handleRemoveNote = useCallback(
-    async (id: string) => {
-      await deleteDoc(doc(db, `users/${uuid}/notes/${id}`));
-      fetchNotes();
-    },
-    [uuid, fetchNotes]
-  );
-
-  const handleInputChange = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
-    setNote(e.target.value);
-  }, []);
-
-  useEffect(() => {
-    fetchNotes();
-  }, [fetchNotes]);
+export const NotesBoard: React.FC<NotesBoardProps> = React.memo(({ userId }) => {
+  const { notes, handleAddNote, handleInputChange, handleRemoveNote, note } = useNotes({ userId });
 
   return (
     <Paper sx={{ p: { xs: 2, sm: 3 }, borderRadius: 2 }}>
@@ -62,7 +24,7 @@ export const NotesBoard: React.FC<NotesBoardProps> = React.memo(({ uuid }) => {
           Save
         </Button>
       </Stack>
-      <List>
+      <List sx={{ maxHeight: 'calc(100vh - 280px)', overflow: 'auto' }}>
         {notes.map((note) => (
           <NotesBoardItem key={note.id} handleRemoveNote={handleRemoveNote} note={note} />
         ))}

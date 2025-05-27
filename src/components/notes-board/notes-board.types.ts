@@ -5,5 +5,5 @@ export interface Note {
 }
 
 export interface NotesBoardProps {
-  uuid: string;
+  userId?: number;
 }

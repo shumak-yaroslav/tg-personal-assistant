@@ -8,5 +8,5 @@ export interface Entry {
 export type EntryType = 'income' | 'expense';
 
 export interface FinanceTrackerProps {
-  uuid: string;
+  userId?: number;
 }

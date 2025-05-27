@@ -1,17 +1,20 @@
 import React, { useCallback, memo } from 'react';
 import { AppBar, Toolbar, Button, Box } from '@mui/material';
+import type { TelegramWebAppUser } from '../../types/telegram.ts';
 
 type Section = 'tasks' | 'finance' | 'notes';
 
 interface HeaderProps {
   active: Section;
   onChange: (section: Section) => void;
+  user: TelegramWebAppUser | null;
 }
 
-export const Header: React.FC<HeaderProps> = memo(({ active, onChange }) => {
+export const Header: React.FC<HeaderProps> = memo(({ active, onChange, user }) => {
   const handleTasksClick = useCallback(() => onChange('tasks'), [onChange]);
   const handleFinanceClick = useCallback(() => onChange('finance'), [onChange]);
   const handleNotesClick = useCallback(() => onChange('notes'), [onChange]);
+  const title = user ? `Hello, ${user.username}` : 'Hello, Guest';
 
   return (
     <AppBar
@@ -23,7 +26,10 @@ export const Header: React.FC<HeaderProps> = memo(({ active, onChange }) => {
         borderBottom: '1px solid #e0e0e0',
       }}
     >
-      <Toolbar sx={{ minHeight: 56 }}>
+      <Toolbar sx={{ minHeight: 56, display: 'flex', justifyContent: 'space-between' }}>
+        <Box sx={{ fontWeight: 500 }}>
+          {title}
+        </Box>
         <Box display="flex" gap={1}>
           <Button
             variant={active === 'tasks' ? 'contained' : 'text'}

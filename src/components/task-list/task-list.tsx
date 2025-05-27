@@ -1,51 +1,11 @@
-import React, { useEffect, useState, useCallback } from 'react';
-import { collection, addDoc, getDocs, deleteDoc, doc } from 'firebase/firestore';
-import { db } from '../../firebase/firebaseConfig';
+import React from 'react';
 import { Button, List, TextField, Typography, Paper, Stack } from '@mui/material';
-import type { Task, TaskListProps } from './task-list.types.ts';
+import type { TaskListProps } from './task-list.types.ts';
 import { TaskListItem } from './components/task-list-item.tsx';
+import { useTasks } from './hooks/use-tasks.hook.ts';
 
-export const TaskList: React.FC<TaskListProps> = React.memo(({ uuid }) => {
-  const [tasks, setTasks] = useState<Task[]>([]);
-  const [input, setInput] = useState('');
-
-  const fetchTasks = useCallback(async () => {
-    const snapshot = await getDocs(collection(db, `users/${uuid}/tasks`));
-
-    const result = snapshot.docs.map((doc) => ({
-      id: doc.id,
-      text: doc.data().text,
-    })) as Task[];
-
-    setTasks(result);
-  }, [uuid]);
-
-  const handleAddTask = useCallback(async () => {
-    if (!input.trim()) {
-      return;
-    }
-
-    await addDoc(collection(db, `users/${uuid}/tasks`), { text: input });
-
-    setInput('');
-    fetchTasks();
-  }, [input, uuid, fetchTasks]);
-
-  const handleRemoveTask = useCallback(
-    async (id: string) => {
-      await deleteDoc(doc(db, `users/${uuid}/tasks/${id}`));
-      fetchTasks();
-    },
-    [uuid, fetchTasks]
-  );
-
-  const handleInputChange = useCallback((event: React.ChangeEvent<HTMLInputElement>) => {
-    setInput(event.target.value);
-  }, []);
-
-  useEffect(() => {
-    fetchTasks();
-  }, [fetchTasks]);
+export const TaskList: React.FC<TaskListProps> = React.memo(({ userId }) => {
+  const { tasks, handleRemoveTask, handleInputChange, handleAddTask, task } = useTasks({ userId });
 
   return (
     <Paper sx={{ p: { xs: 2, sm: 3 }, borderRadius: 2 }}>
@@ -56,7 +16,7 @@ export const TaskList: React.FC<TaskListProps> = React.memo(({ uuid }) => {
         <TextField
           fullWidth
           label="New task"
-          value={input}
+          value={task}
           type="text"
           onChange={handleInputChange}
           size="small"
@@ -65,7 +25,7 @@ export const TaskList: React.FC<TaskListProps> = React.memo(({ uuid }) => {
           Add
         </Button>
       </Stack>
-      <List>
+      <List sx={{ maxHeight: 'calc(100vh - 280px)', overflow: 'auto' }}>
         {tasks.map((task) => (
           <TaskListItem key={task.id} handleRemoveTask={handleRemoveTask} task={task} />
         ))}
