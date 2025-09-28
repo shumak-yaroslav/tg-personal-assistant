@@ -10,7 +10,7 @@ export const TaskList: React.FC<TaskListProps> = React.memo(({ userId }) => {
 
   return (
     <Paper sx={{ p: { xs: 2, sm: 3 }, borderRadius: 2 }}>
-      <Typography variant="h6" fontWeight={600} mb={2}>
+      <Typography variant="h6" fontWeight={500} mb={2}>
         Tasks
       </Typography>
       <Stack direction={{ xs: 'column', sm: 'row' }} spacing={2} mb={2}>
@@ -22,7 +22,7 @@ export const TaskList: React.FC<TaskListProps> = React.memo(({ userId }) => {
           onChange={handleInputChange}
           size="small"
         />
-        <Button variant="contained" onClick={handleAddTask} sx={{ minWidth: 120 }}>
+        <Button variant="contained" onClick={handleAddTask} sx={{ minWidth: 140 }}>
           Add
         </Button>
       </Stack>

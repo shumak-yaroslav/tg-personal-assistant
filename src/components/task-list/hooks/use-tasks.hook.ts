@@ -3,18 +3,7 @@ import type { Task } from '../task-list.types.ts';
 import { addDoc, collection, deleteDoc, doc, getDocs } from 'firebase/firestore';
 import { db } from '../../../firebase/firebaseConfig.ts';
 import { EMPTY_STRING } from '../../../shared/consts';
-
-interface UseTasksReturnValues {
-  tasks: Array<Task>;
-  handleAddTask: () => Promise<void>;
-  handleRemoveTask: (id: string) => Promise<void>;
-  handleInputChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
-  task: string;
-}
-
-interface UseTasksProps {
-  userId?: number;
-}
+import type { UseTasksProps, UseTasksReturnValues } from './types';
 
 export const useTasks = ({ userId }: UseTasksProps): UseTasksReturnValues => {
   const [tasks, setTasks] = useState<Array<Task>>([]);
@@ -59,4 +48,4 @@ export const useTasks = ({ userId }: UseTasksProps): UseTasksReturnValues => {
   }, [fetchTasks]);
 
   return { tasks, handleAddTask, handleInputChange, handleRemoveTask, task };
-}
+};
