@@ -56,7 +56,6 @@ export const App: React.FC = () => {
           {section === 'tasks' && <TaskList userId={user?.id} />}
           {section === 'finance' && <FinanceTracker userId={user?.id} />}
           {section === 'notes' && <NotesBoard userId={user?.id} />}
-          {section === 'login' && <Login />}
         </Box>
       </Container>
     </ThemeProvider>
