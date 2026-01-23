@@ -4,6 +4,7 @@ import { Header } from './components/header';
 import { TaskList } from './components/task-list';
 import { NotesBoard } from './components/notes-board';
 import { FinanceTracker } from './components/finance-tracker';
+import { Login } from './components/logjn';
 import { useTelegramData } from './hooks/use-telegram-data.hook.ts';
 
 const theme = createTheme({
@@ -43,7 +44,7 @@ const theme = createTheme({
 });
 
 export const App: React.FC = () => {
-  const [section, setSection] = useState<'tasks' | 'finance' | 'notes'>('tasks');
+  const [section, setSection] = useState<'tasks' | 'finance' | 'notes' | 'login'>('tasks');
   const { user } = useTelegramData();
 
   return (

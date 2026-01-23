@@ -2,7 +2,7 @@ import React, { useCallback, memo } from 'react';
 import { AppBar, Toolbar, Button, Box } from '@mui/material';
 import type { TelegramWebAppUser } from '../../types/telegram.ts';
 
-type Section = 'tasks' | 'finance' | 'notes';
+type Section = 'tasks' | 'finance' | 'notes' | 'login';
 
 interface HeaderProps {
   active: Section;
